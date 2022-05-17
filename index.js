@@ -39,7 +39,7 @@ async function run() {
         const userCollection = client.db("doctors-portal").collection("users");
         app.get('/service', async (req, res) => {
             const query = {}
-            const cursor = serviceCollection.find(query)
+            const cursor = serviceCollection.find(query).project({ name: 1 })
             const services = await cursor.toArray()
             res.send(services)
         })
@@ -49,7 +49,7 @@ async function run() {
             res.send(users)
         })
 
-        app.get('admin/:email', async (req, res) => {
+        app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email })
             const isAdmin = user.role === 'admin'
